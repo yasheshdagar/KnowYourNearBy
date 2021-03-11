@@ -1,1 +1,1 @@
-# KnowYourNearBy
+# KnowYourNearBy - project description pending
