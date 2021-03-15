@@ -1,4 +1,4 @@
-package com.example.mc_project;
+package com.example.mc_project.notification;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -9,11 +9,15 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Build;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationManagerCompat;
+
+import com.example.mc_project.R;
+import com.example.mc_project.view.MapsActivity;
 
 import java.util.Random;
 
-class SendingNotification extends ContextWrapper {
+public class SendingNotification extends ContextWrapper {
 
     String CHANNEL_ID = "com.example.mc_project";
 
@@ -29,6 +33,7 @@ class SendingNotification extends ContextWrapper {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void sendNotification(String title, String contentText){
         Intent intent = new Intent(this, MapsActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
@@ -42,8 +47,6 @@ class SendingNotification extends ContextWrapper {
                 .build();
 
         NotificationManagerCompat.from(this).notify(new Random().nextInt(), notification);
-
-
     }
 
 }

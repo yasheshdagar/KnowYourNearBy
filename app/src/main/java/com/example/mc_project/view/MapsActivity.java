@@ -1,4 +1,4 @@
-package com.example.mc_project;
+package com.example.mc_project.view;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -23,6 +23,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.divyanshu.colorseekbar.ColorSeekBar;
+import com.example.mc_project.controller.GeofenceController;
+import com.example.mc_project.receiver.GeofenceReceiver;
+import com.example.mc_project.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
@@ -105,8 +108,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
-                    LatLng mylatlang = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mylatlang, 16));
+                    LatLng myLatLang = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLang, 16));
                 }
 
 
@@ -123,7 +126,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapLongClick(LatLng latLng) {
         showSelectionDialog(latLng);
-
     }
 
     @Override
@@ -247,6 +249,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.addMarker(markerOptions);
     }
-
-
 }

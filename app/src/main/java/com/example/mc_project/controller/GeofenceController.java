@@ -1,4 +1,4 @@
-package com.example.mc_project;
+package com.example.mc_project.controller;
 
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -8,7 +8,8 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 
-class GeofenceController extends ContextWrapper {
+public class GeofenceController extends ContextWrapper {
+
     public GeofenceController(Context base) {
         super(base);
     }
