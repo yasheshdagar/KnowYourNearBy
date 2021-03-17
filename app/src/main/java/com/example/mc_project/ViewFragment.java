@@ -65,6 +65,13 @@ public class ViewFragment extends Fragment implements RecyclerAdapter.OnItemClic
     @Override
     public void onResume() {
         super.onResume();
+        if(recyclerAdapter == null){
+            recyclerAdapter = new RecyclerAdapter(list);
+            recyclerView.setAdapter(recyclerAdapter);
+        }else {
+            list = database.rdb.geoFenceDao().getAllGeoFences();
+            recyclerAdapter.updateAdapter(list);
+        }
 
     }
 }

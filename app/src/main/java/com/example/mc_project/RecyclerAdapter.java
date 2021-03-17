@@ -51,6 +51,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         return gfs.size();
     }
 
+    public void updateAdapter(List<GeoFence> geoFenceList) {
+        this.gfs = geoFenceList;
+        notifyDataSetChanged();
+    }
+
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView Name,Radius;
         ImageView img;
