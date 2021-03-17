@@ -13,7 +13,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.mc_project.R;
-import com.example.mc_project.view.MapsActivity;
+import com.example.mc_project.MapsActivity;
 
 import java.util.Random;
 
