@@ -2,21 +2,16 @@ package com.example.mc_project;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.room.Room;
 
 import android.os.Bundle;
-
-import com.example.mc_project.HomeFragment;
-import com.example.mc_project.R;
-import com.example.mc_project.RoomDbClass;
 
 public class DatabaseActivity extends AppCompatActivity {
 
     static FragmentManager fmng;
-    static RoomDbClass rdb;
+//    static RoomDbClass rdb;
 
     DatabaseActivity(){
-        rdb = Room.databaseBuilder(getApplicationContext(),RoomDbClass.class,"mydb").allowMainThreadQueries().build();
+//       rdb = Room.databaseBuilder(getApplicationContext(),RoomDbClass.class,"mydb").allowMainThreadQueries().build();
 
     }
 
@@ -24,6 +19,7 @@ public class DatabaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database);
+//        rdb = Room.databaseBuilder(getApplicationContext(),RoomDbClass.class,"mydb").allowMainThreadQueries().build();
 
         fmng = getSupportFragmentManager();
         if(findViewById(R.id.Container)!=null){

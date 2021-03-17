@@ -20,6 +20,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         this.gfs = gf;
     }
 
+    private RecyclerAdapter.OnItemClickListener listener;
+
+    public interface OnItemClickListener{
+        void onItemClicked(int position);
+    }
+
+    public void setOnItemClickListener(RecyclerAdapter.OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     @NonNull
     @Override
     public RecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -31,7 +41,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public void onBindViewHolder(@NonNull RecyclerAdapter.MyViewHolder holder, int position) {
         holder.Name.setText(String.valueOf(gfs.get(position).getName()));
         String rds = String.valueOf(gfs.get(position).getRadius());
-        rds+=" Km";
+        rds+=" m";
         holder.Radius.setText(rds);
         holder.img.setImageResource(R.drawable.geofencesimg);
     }
@@ -49,6 +59,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             Name = itemView.findViewById(R.id.Name);
             Radius = itemView.findViewById(R.id.radius);
             img = itemView.findViewById(R.id.imageid);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(listener != null) {
+                        int position = getAdapterPosition();
+
+                        if(position != RecyclerView.NO_POSITION) {
+                            listener.onItemClicked(position);
+                        }
+                    }
+                }
+            });
         }
     }
 }

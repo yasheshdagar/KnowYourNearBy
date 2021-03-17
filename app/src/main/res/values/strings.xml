@@ -15,4 +15,5 @@
         <item>#FF00FF</item>
         <item>#FF0000</item>
     </array>
+    <string name="title_activity_view_geofence">Map</string>
 </resources>

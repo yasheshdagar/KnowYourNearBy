@@ -19,6 +19,7 @@
             android:layout_height="75dp"
             android:id="@+id/imageid"
             android:src="@mipmap/ic_launcher"
+            android:layout_centerVertical="true"
             />
 
         <TextView

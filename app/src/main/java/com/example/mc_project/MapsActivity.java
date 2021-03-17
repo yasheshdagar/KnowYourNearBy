@@ -5,6 +5,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -49,6 +51,7 @@ import com.warkiz.widget.SeekParams;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
@@ -69,6 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     private FusedLocationProviderClient fusedLocationProviderClient;
+    //static RoomDbClass roomDatabase;
 
 
     @Override
@@ -87,6 +91,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         gf  = new GeoFence();
 
         intent = new Intent(this, GeofenceReceiver.class);
+
 
     }
 
@@ -249,6 +254,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Toast.makeText(MapsActivity.this, "Geofence added successfully", Toast.LENGTH_SHORT).show();
 
                             String type = "custom";
+                            gf.setId(0);
                             gf.setName(requestId);
                             gf.setLatitude(latLng.latitude);
                             gf.setLongitude(latLng.longitude);
@@ -256,7 +262,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             gf.setColor(circleColor);
                             gf.setType(type);
 
-                            DatabaseActivity.rdb.geoFenceDao().addGeoFence(gf);
+                            //DatabaseActivity.rdb.geoFenceDao().addGeoFence(gf);
+                            Database database = new Database(MapsActivity.this);
+                            database.rdb.geoFenceDao().addGeoFence(gf);
                             Toast.makeText(MapsActivity.this,"Data Saved !!",Toast.LENGTH_SHORT).show();
 
 

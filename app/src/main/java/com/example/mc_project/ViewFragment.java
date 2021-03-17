@@ -1,10 +1,12 @@
 package com.example.mc_project;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,11 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class ViewFragment extends Fragment {
+public class ViewFragment extends Fragment implements RecyclerAdapter.OnItemClickListener{
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     RecyclerAdapter recyclerAdapter;
     private TextView tview;
+    private List<GeoFence> list;
+    private Database database;
     public ViewFragment(){
 
     }
@@ -26,7 +30,9 @@ public class ViewFragment extends Fragment {
         View view = inflater.inflate(R.layout.viewfgm, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
         tview = view.findViewById(R.id.nogfs);
-        List<GeoFence> list = DatabaseActivity.rdb.geoFenceDao().getAllGeoFences();
+
+        database = new Database(getContext());
+        list = database.rdb.geoFenceDao().getAllGeoFences();
         if(list.size()==0){
             tview.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.INVISIBLE);
@@ -38,8 +44,28 @@ public class ViewFragment extends Fragment {
             recyclerView.setLayoutManager(layoutManager);
             recyclerAdapter = new RecyclerAdapter(list);
             recyclerView.setAdapter(recyclerAdapter);
+            recyclerAdapter.setOnItemClickListener(this::onItemClicked);
         }
+
         return view;
+    }
+
+    @Override
+    public void onItemClicked(int position) {
+
+        Intent intent = new Intent(getContext(), ViewGeofence.class);
+        intent.putExtra("latitude", list.get(position).getLatitude());
+        intent.putExtra("longitude", list.get(position).getLongitude());
+        intent.putExtra("color", list.get(position).getColor());
+        intent.putExtra("radius", list.get(position).getRadius());
+        intent.putExtra("type", list.get(position).getType());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 }
 
