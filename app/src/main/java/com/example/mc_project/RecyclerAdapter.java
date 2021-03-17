@@ -24,6 +24,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     public interface OnItemClickListener{
         void onItemClicked(int position);
+        void onDeleteClicked(int position);
     }
 
     public void setOnItemClickListener(RecyclerAdapter.OnItemClickListener listener) {
@@ -45,6 +46,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         rds+=" m";
         holder.Radius.setText(rds);
         holder.img.setImageResource(R.drawable.geofencesimg);
+        holder.delt.setImageResource(R.drawable.ic_baseline_delete_24);
     }
 
     @Override
@@ -60,13 +62,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView Name,Radius,Type;
-        ImageView img;
+        ImageView img,delt;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             Name = itemView.findViewById(R.id.Name);
             Radius = itemView.findViewById(R.id.radius);
             img = itemView.findViewById(R.id.imageid);
             Type = itemView.findViewById(R.id.type);
+            delt = itemView.findViewById(R.id.deleteCL);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -76,6 +79,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
                         if(position != RecyclerView.NO_POSITION) {
                             listener.onItemClicked(position);
+                        }
+                    }
+                }
+            });
+
+            delt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null) {
+                        int position = getAdapterPosition();
+
+                        if(position != RecyclerView.NO_POSITION) {
+                            listener.onDeleteClicked(position);
                         }
                     }
                 }

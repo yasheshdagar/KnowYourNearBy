@@ -66,5 +66,16 @@
             android:textColor="#a9a9a9"
             android:textSize="18sp" />
 
+        <ImageView
+            android:id="@+id/deleteCL"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/Name"
+            android:layout_alignEnd="@+id/type"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="-110dp"
+            android:src="@mipmap/ic_launcher" />
+
     </RelativeLayout>
+
 </androidx.cardview.widget.CardView>

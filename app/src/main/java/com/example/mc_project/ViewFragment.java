@@ -48,7 +48,18 @@ public class ViewFragment extends Fragment implements RecyclerAdapter.OnItemClic
             recyclerView.setLayoutManager(layoutManager);
             recyclerAdapter = new RecyclerAdapter(list);
             recyclerView.setAdapter(recyclerAdapter);
-            recyclerAdapter.setOnItemClickListener(this::onItemClicked);
+            recyclerAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClicked(int position) {
+                    onClicked(position);
+                }
+
+                @Override
+                public void onDeleteClicked(int position) {
+                    onRemove(position);
+                }
+            });
+
         }
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -62,9 +73,8 @@ public class ViewFragment extends Fragment implements RecyclerAdapter.OnItemClic
         return view;
     }
 
-    @Override
-    public void onItemClicked(int position) {
 
+    public void onClicked(int position){
         Intent intent = new Intent(getContext(), ViewGeofence.class);
         intent.putExtra("latitude", list.get(position).getLatitude());
         intent.putExtra("longitude", list.get(position).getLongitude());
@@ -72,6 +82,12 @@ public class ViewFragment extends Fragment implements RecyclerAdapter.OnItemClic
         intent.putExtra("radius", list.get(position).getRadius());
         intent.putExtra("type", list.get(position).getType());
         startActivity(intent);
+    }
+
+    public void onRemove(int position){
+        database.rdb.geoFenceDao().deleteById(list.get(position).getId());
+        list.remove(position);
+        recyclerAdapter.notifyItemRemoved(position);
     }
 
     @Override
@@ -84,6 +100,16 @@ public class ViewFragment extends Fragment implements RecyclerAdapter.OnItemClic
             list = database.rdb.geoFenceDao().getAllGeoFences();
             recyclerAdapter.updateAdapter(list);
         }
+
+    }
+
+    @Override
+    public void onItemClicked(int position) {
+
+    }
+
+    @Override
+    public void onDeleteClicked(int position) {
 
     }
 }

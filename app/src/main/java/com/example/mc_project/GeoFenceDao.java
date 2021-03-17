@@ -15,4 +15,7 @@ public interface GeoFenceDao {
     @Query("SELECT * FROM GeoFence")
     List<GeoFence> getAllGeoFences();
 
+    @Query("DELETE FROM GeoFence WHERE Id = :id")
+    void deleteById(int id);
+
 }
