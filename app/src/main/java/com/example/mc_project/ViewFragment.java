@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.List;
 
 public class ViewFragment extends Fragment implements RecyclerAdapter.OnItemClickListener{
@@ -21,6 +23,7 @@ public class ViewFragment extends Fragment implements RecyclerAdapter.OnItemClic
     private TextView tview;
     private List<GeoFence> list;
     private Database database;
+    private FloatingActionButton floatingActionButton;
     public ViewFragment(){
 
     }
@@ -30,6 +33,7 @@ public class ViewFragment extends Fragment implements RecyclerAdapter.OnItemClic
         View view = inflater.inflate(R.layout.viewfgm, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
         tview = view.findViewById(R.id.nogfs);
+        floatingActionButton = view.findViewById(R.id.floatingActionButtonAddGeofence);
 
         database = new Database(getContext());
         list = database.rdb.geoFenceDao().getAllGeoFences();
@@ -46,6 +50,14 @@ public class ViewFragment extends Fragment implements RecyclerAdapter.OnItemClic
             recyclerView.setAdapter(recyclerAdapter);
             recyclerAdapter.setOnItemClickListener(this::onItemClicked);
         }
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext() , MapsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }
