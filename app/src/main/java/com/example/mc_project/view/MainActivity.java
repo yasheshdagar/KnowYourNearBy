@@ -1,6 +1,14 @@
 package com.example.mc_project.view;
 
-import androidx.annotation.NonNull;
+import android.app.ProgressDialog;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,18 +18,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mc_project.R;
 import com.example.mc_project.api.ApiUrl;
@@ -50,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private InContainmentZonePresenter containmentZonePresenter;
 
     private ProgressDialog progressDialog;
+
+    private Location currentLocation;
 
     private static final String[] LOCATION_PERMISSION = {
             "android.permission.ACCESS_COARSE_LOCATION",
@@ -88,8 +86,17 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()){
 
                 case R.id.hot_spots:
-                    if(!checkVisibility("CovidFragment"))
-                        addFragment(new CovidFragment(),"CovidFragment", true, null, R.id.fragment_container);
+                    if(!checkVisibility("CovidFragment")){
+                        if(currentLocation != null){
+                            Bundle bundle = new Bundle();
+                            bundle.putDouble("latitude", currentLocation.getLatitude());
+                            bundle.putDouble("longitude", currentLocation.getLongitude());
+                            addFragment(new CovidFragment(),"CovidFragment", true, bundle, R.id.fragment_container);
+                        }else {
+                            Toast.makeText(this, "Location not available...", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
             }
@@ -110,17 +117,27 @@ public class MainActivity extends AppCompatActivity {
             Task<Location> locationTask = client.getLastLocation();
 
             locationTask.addOnSuccessListener(location -> {
-                Log.i(this.getClass().getName(), "[getLatLng] - Latitude " + location.getLatitude());
-                Log.i(this.getClass().getName(), "[getLatLng] - Longitude " + location.getLongitude());
 
-                if(progressDialog == null){
-                    progressDialog = new ProgressDialog(this);
-                    progressDialog.setMessage("Loading...");
-                    progressDialog.setCancelable(Boolean.FALSE);
+                if(location != null){
+
+                    currentLocation = location;
+
+                    Log.i(this.getClass().getName(), "[getLatLng] - Latitude " + location.getLatitude());
+                    Log.i(this.getClass().getName(), "[getLatLng] - Longitude " + location.getLongitude());
+
+                    if(progressDialog == null){
+                        progressDialog = new ProgressDialog(this);
+                        progressDialog.setMessage("Loading...");
+                        progressDialog.setCancelable(Boolean.FALSE);
+                    }
+
+                    progressDialog.show();
+                    containmentZonePresenter.getInContainmentZoneStatus(createInContainmentZoneRequest(location.getLatitude(),location.getLongitude()));
+
+                }else {
+                    Toast.makeText(this, "Location not available...", Toast.LENGTH_SHORT).show();
+                    currentLocation = null;
                 }
-
-                progressDialog.show();
-                containmentZonePresenter.getInContainmentZoneStatus(createInContainmentZoneRequest(location.getLatitude(),location.getLongitude()));
             });
 
             locationTask.addOnFailureListener(e -> {});

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,12 +30,10 @@ import com.example.mc_project.model.request.LocationGeoIQRequest;
 import com.example.mc_project.model.response.LocationGeoIQResponse;
 import com.example.mc_project.presenter.CovidPresenter;
 import com.example.mc_project.receiver.GeofenceReceiver;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -64,6 +61,8 @@ public class CovidFragment extends Fragment implements CovidListener {
 
     private TextView emptyView;
 
+    private double latitude, longitude;
+
     private final int PENDING_INTENT_REQUEST_CODE = 101;
 
     private static final String[] LOCATION_PERMISSION = {
@@ -83,6 +82,9 @@ public class CovidFragment extends Fragment implements CovidListener {
         super.onViewCreated(view, savedInstanceState);
         Log.i(this.getActivity().getClass().getName(), "[OnViewCreated] - Fragment view created");
 
+        latitude = getArguments().getDouble("latitude");
+        longitude = getArguments().getDouble("longitude");
+
         recyclerView = view.findViewById(R.id.covid_recycler);
         emptyView = view.findViewById(R.id.empty_view);
 
@@ -96,32 +98,19 @@ public class CovidFragment extends Fragment implements CovidListener {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(covidAdapter);
 
-        getLatLng();
+        getLocationBasedRegions();
     }
 
-    private void getLatLng() {
+    private void getLocationBasedRegions() {
 
-        if (checkPermission(LOCATION_PERMISSION)) {
-            FusedLocationProviderClient client = LocationServices.getFusedLocationProviderClient(getActivity());
-            Task<Location> locationTask = client.getLastLocation();
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setMessage("Loading...");
+            progressDialog.setCancelable(Boolean.FALSE);
+        }
 
-            locationTask.addOnSuccessListener(location -> {
-                Log.i(getActivity().getClass().getName(), "[getLatLng] - Latitude " + location.getLatitude());
-                Log.i(getActivity().getClass().getName(), "[getLatLng] - Longitude " + location.getLongitude());
-
-                if(progressDialog == null){
-                    progressDialog = new ProgressDialog(getActivity());
-                    progressDialog.setMessage("Loading...");
-                    progressDialog.setCancelable(Boolean.FALSE);
-                }
-
-                progressDialog.show();
-                covidPresenter.getLocationBasedRegions(createRequest(location.getLatitude(),location.getLongitude()));
-            });
-
-            locationTask.addOnFailureListener(e -> {});
-
-        } else Toast.makeText(getActivity(), "Location Permission Required", Toast.LENGTH_SHORT).show();
+        progressDialog.show();
+        covidPresenter.getLocationBasedRegions(createRequest(latitude, longitude));
     }
 
     private boolean checkPermission(String[] locationPermission) {
@@ -145,15 +134,15 @@ public class CovidFragment extends Fragment implements CovidListener {
         return locationGeoIQRequest;
     }
 
-    public void onSuccessLocationBased(LocationGeoIQResponse response){
+    public void onSuccessLocationBased(LocationGeoIQResponse response) {
         Log.i(this.getActivity().getClass().getName(), "[onSuccessLocationBased] - Response received successfully");
 
         progressDialog.dismiss();
 
-        if(response.getContainmentZones().size() > 0){
+        if (response.getContainmentZones().size() > 0) {
             zonesList.addAll(response.getContainmentZones());
             covidAdapter.notifyDataSetChanged();
-        }else{
+        } else {
             emptyView.setVisibility(View.VISIBLE);
         }
     }
@@ -164,39 +153,39 @@ public class CovidFragment extends Fragment implements CovidListener {
         List<Address> list = null;
 
         try {
-            list = geocoder.getFromLocationName(zonesList.get(position),1);
+            list = geocoder.getFromLocationName(zonesList.get(position), 1);
         } catch (IOException e) {
             Log.i(this.getActivity().getClass().getName(), "[onClickCreate] - Exception message:" + e.getMessage());
         }
 
-        if(list == null){
+        if (list == null) {
             Log.i(this.getActivity().getClass().getName(), "[onClickCreate] - No location found");
-        }else {
+        } else {
             setUpGeofence(list.get(0).getLatitude(), list.get(0).getLongitude(), zonesList.get(position));
         }
     }
 
     private void setUpGeofence(double latitude, double longitude, String placeName) {
 
-            Intent intent = new Intent(getActivity(), GeofenceReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), PENDING_INTENT_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(getActivity(), GeofenceReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), PENDING_INTENT_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            Geofence geofence = GeofenceController.addGeofence(placeName, latitude, longitude, 1000); //radius is in metres
+        Geofence geofence = GeofenceController.addGeofence(placeName, latitude, longitude, 1000); //radius is in metres
 
-            geofencingRequest = new GeofencingRequest.Builder()
-                    .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-                    .addGeofence(geofence)
-                    .build();
+        geofencingRequest = new GeofencingRequest.Builder()
+                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                .addGeofence(geofence)
+                .build();
 
-            if(checkPermission(LOCATION_PERMISSION)) {
-                geofencingClient.addGeofences(geofencingRequest, pendingIntent).addOnSuccessListener(getActivity(), (aVoid) -> {
-                    Toast.makeText(getActivity(), "Geofence created successfully...", Toast.LENGTH_LONG).show();
-                    // add geofence to database
-                }).addOnFailureListener(getActivity(), e -> {
-                    Log.i(this.getActivity().getClass().getName(), "[setUpGeofence] - error:" + e.getMessage());
-                    Toast.makeText(getActivity(), "Geofence not available...", Toast.LENGTH_LONG).show();
-                });
-            }
+        if (checkPermission(LOCATION_PERMISSION)) {
+            geofencingClient.addGeofences(geofencingRequest, pendingIntent).addOnSuccessListener(getActivity(), (aVoid) -> {
+                Toast.makeText(getActivity(), "Geofence created successfully...", Toast.LENGTH_LONG).show();
+                // add geofence to database
+            }).addOnFailureListener(getActivity(), e -> {
+                Log.i(this.getActivity().getClass().getName(), "[setUpGeofence] - error:" + e.getMessage());
+                Toast.makeText(getActivity(), "Geofence not available...", Toast.LENGTH_LONG).show();
+            });
+        }
 
     }
 }
