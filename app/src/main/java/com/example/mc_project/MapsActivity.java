@@ -1,10 +1,12 @@
-package com.example.mc_project.view;
+package com.example.mc_project;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -15,6 +17,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +29,6 @@ import android.widget.Toast;
 import com.divyanshu.colorseekbar.ColorSeekBar;
 import com.example.mc_project.controller.GeofenceController;
 import com.example.mc_project.receiver.GeofenceReceiver;
-import com.example.mc_project.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
@@ -45,6 +48,11 @@ import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.OnSeekChangeListener;
 import com.warkiz.widget.SeekParams;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
     private GoogleMap mMap;
@@ -57,8 +65,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private float radius = 100f;
     private int r, g, b;
     private String color;
+    private int circleColor;
+    private StringBuilder strAddress;
+    private GeoFence gf;
+    private String requestId;
+
 
     private FusedLocationProviderClient fusedLocationProviderClient;
+    //static RoomDbClass roomDatabase;
 
 
     @Override
@@ -74,8 +88,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         geofencingClient = LocationServices.getGeofencingClient(this);
         controller = new GeofenceController(this);
+        gf  = new GeoFence();
 
         intent = new Intent(this, GeofenceReceiver.class);
+
 
     }
 
@@ -137,6 +153,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         radius = 100f;
         color = String.format("#%06X", (0xFFFFFF & -65536));
+        circleColor = -65536;
         r = 255;
         g = 0;
         b = 0;
@@ -170,6 +187,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onColorChangeListener(int i) {
                 color = String.format("#%06X", (0xFFFFFF & i));
+                circleColor = i;
                 r = Color.red(i);
                 g = Color.green(i);
                 b = Color.blue(i);
@@ -190,7 +208,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 Log.i("MapsActivity_Location", latitude + " " + longitude);
 
-                String requestId = "a";
+
+                requestId = getPlace(latitude, longitude);
 
                 Geofence geofence = GeofenceController.addGeofence(requestId, latitude, longitude, radius);
                 geofencingRequest = new GeofencingRequest.Builder().setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER).addGeofence(geofence).build();
@@ -204,6 +223,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
+    private String getPlace(double latitude, double longitude){
+        Geocoder geocoder = new Geocoder(this, Locale.ENGLISH);
+        try {
+            List<Address> addressList = geocoder.getFromLocation(latitude, longitude, 1);
+
+            if (addressList.size() > 0) {
+                Address place = addressList.get(0);
+                strAddress = new StringBuilder();
+
+                for (int i = 0; i <= place.getMaxAddressLineIndex(); i++) {
+
+                    strAddress.append(place.getAddressLine(i)).append(" ");
+                    Log.i("MapsActivity_place", strAddress.toString());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return strAddress.toString();
+    }
+
     private void geofenceAdded(LatLng latLng, float radius){
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             geofencingClient.addGeofences(geofencingRequest, pendingIntent)
@@ -212,9 +253,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         public void onSuccess(Void aVoid) {
                             Toast.makeText(MapsActivity.this, "Geofence added successfully", Toast.LENGTH_SHORT).show();
 
+                            String type = "custom";
+                            gf.setId(0);
+                            gf.setName(requestId);
+                            gf.setLatitude(latLng.latitude);
+                            gf.setLongitude(latLng.longitude);
+                            gf.setRadius(radius);
+                            gf.setColor(circleColor);
+                            gf.setType(type);
+
+                            //DatabaseActivity.rdb.geoFenceDao().addGeoFence(gf);
+                            Database database = new Database(MapsActivity.this);
+                            database.rdb.geoFenceDao().addGeoFence(gf);
+                            Toast.makeText(MapsActivity.this,"Data Saved !!",Toast.LENGTH_SHORT).show();
+
+
                             String title = "" + (int) radius + " m";
                             addMarker(latLng, title, color);
                             mMap.addCircle(controller.addCircle(latLng, radius, r, g, b));
+
+
 
                         }
                     }).addOnFailureListener(this, new OnFailureListener() {

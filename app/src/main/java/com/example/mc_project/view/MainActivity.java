@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -19,6 +20,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
+
+import com.example.mc_project.DatabaseActivity;
+import com.example.mc_project.MapsActivity;
 import com.example.mc_project.R;
 import com.example.mc_project.api.ApiUrl;
 import com.example.mc_project.model.request.InContainmentZoneRequest;
@@ -30,6 +42,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
+import com.example.mc_project.ViewFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -184,6 +197,14 @@ public class MainActivity extends AppCompatActivity {
         totalCases.setText(Integer.toString(response.getInContainmentList().get(0).getTotalCases()));
         activeCases.setText(Integer.toString(response.getInContainmentList().get(0).getActiveCases()));
     }
+
+    myGeofences.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            frameLayout.setVisibility(View.VISIBLE);
+            addFragment(new ViewFragment(), "ViewFragment", true, null, R.id.fragment_container);
+        }
+    });
 
     public void addFragment(Fragment fragment, String tag, boolean addToBackStack, Bundle bundle, int frameLayout) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
