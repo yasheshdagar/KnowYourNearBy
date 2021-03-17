@@ -7,4 +7,5 @@ public class ApiUrl {
     public static final String BASE_URL = "https://data.geoiq.io/dataapis/v1.0/covid/";
 
     public static final String LOCATION_BASED_NEARBY_ZONES = "nearbyzones";
+    public static final String IN_CONTAINMENT_ZONE = "locationcheck";
 }

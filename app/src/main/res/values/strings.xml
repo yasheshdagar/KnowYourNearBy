@@ -1,7 +1,9 @@
 <resources>
-    <string name="app_name">Know Your NearBy</string>
+    <string name="app_name">Know Your Nearby</string>
 
     <string name="title_activity_maps">MC-Project</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
 
     <array name="colors">
         <item>#FF0000</item>

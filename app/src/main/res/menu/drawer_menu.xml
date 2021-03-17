@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/covid"
+        android:title="Covid">
+
+        <menu>
+            <item
+                android:id="@+id/hot_spots"
+                android:title="HotSpots" />
+            <!--                android:icon="@drawable/ic_drawer_log"/>-->
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/geofences"
+        android:title="Geofence">
+
+        <menu>
+            <item
+                android:id="@+id/my_geofences"
+                android:title="My Geofences" />
+            <!--                android:icon="@drawable/ic_drawer_log"/>-->
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/search"
+        android:title="Search">
+
+        <menu>
+            <item
+                android:id="@+id/places"
+                android:title="Places" />
+            <!--                android:icon="@drawable/ic_drawer_log"/>-->
+
+            <item
+                android:id="@+id/restaurants"
+                android:title="Restaurants" />
+            <!--                android:icon="@drawable/ic_drawer_log"/>-->
+
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/about"
+        android:title="About">
+
+        <menu>
+            <item
+                android:id="@+id/know_nearby"
+                android:title="Know Your NearBy" />
+            <!--                android:icon="@drawable/ic_drawer_log"/>-->
+        </menu>
+    </item>
+
+
+</menu>
