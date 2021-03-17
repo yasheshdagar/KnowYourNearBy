@@ -40,6 +40,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull RecyclerAdapter.MyViewHolder holder, int position) {
         holder.Name.setText(String.valueOf(gfs.get(position).getName()));
+        holder.Type.setText(String.valueOf(gfs.get(position).getType()));
         String rds = String.valueOf(gfs.get(position).getRadius());
         rds+=" m";
         holder.Radius.setText(rds);
@@ -58,13 +59,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView Name,Radius;
+        TextView Name,Radius,Type;
         ImageView img;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             Name = itemView.findViewById(R.id.Name);
             Radius = itemView.findViewById(R.id.radius);
             img = itemView.findViewById(R.id.imageid);
+            Type = itemView.findViewById(R.id.type);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
