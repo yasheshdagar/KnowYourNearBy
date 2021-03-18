@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Know Your Nearby</string>
 
-    <string name="title_activity_maps">MC-Project</string>
+    <string name="title_activity_maps">Know Your Nearby</string>
     <string name="open">open</string>
     <string name="close">close</string>
 
@@ -17,5 +17,5 @@
         <item>#FF00FF</item>
         <item>#FF0000</item>
     </array>
-    <string name="title_activity_view_geofence">Map</string>
+    <string name="title_activity_view_geofence">Know Your Nearby</string>
 </resources>

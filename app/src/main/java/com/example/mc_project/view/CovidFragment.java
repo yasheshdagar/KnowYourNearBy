@@ -21,6 +21,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mc_project.Database;
+import com.example.mc_project.GeoFence;
+import com.example.mc_project.MapsActivity;
 import com.example.mc_project.R;
 import com.example.mc_project.adapter.CovidAdapter;
 import com.example.mc_project.api.ApiUrl;
@@ -170,7 +173,7 @@ public class CovidFragment extends Fragment implements CovidListener {
         Intent intent = new Intent(getActivity(), GeofenceReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), PENDING_INTENT_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Geofence geofence = GeofenceController.addGeofence(placeName, latitude, longitude, 1000); //radius is in metres
+        Geofence geofence = GeofenceController.addGeofence(placeName, latitude, longitude, 300); //radius is in metres
 
         geofencingRequest = new GeofencingRequest.Builder()
                 .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
@@ -180,12 +183,27 @@ public class CovidFragment extends Fragment implements CovidListener {
         if (checkPermission(LOCATION_PERMISSION)) {
             geofencingClient.addGeofences(geofencingRequest, pendingIntent).addOnSuccessListener(getActivity(), (aVoid) -> {
                 Toast.makeText(getActivity(), "Geofence created successfully...", Toast.LENGTH_LONG).show();
-                // add geofence to database
+                Database.getRdb().geoFenceDao().addGeoFence(createGeofenceData(placeName));
+
             }).addOnFailureListener(getActivity(), e -> {
                 Log.i(this.getActivity().getClass().getName(), "[setUpGeofence] - error:" + e.getMessage());
                 Toast.makeText(getActivity(), "Geofence not available...", Toast.LENGTH_LONG).show();
             });
         }
 
+    }
+
+    private GeoFence createGeofenceData(String placeName) {
+
+        GeoFence geoFence = new GeoFence();
+        geoFence.setId(0);
+        geoFence.setName(placeName);
+        geoFence.setLatitude(latitude);
+        geoFence.setLongitude(longitude);
+        geoFence.setRadius(500);
+        geoFence.setColor(-65536); //red integer value
+        geoFence.setType("covid");
+
+        return geoFence;
     }
 }

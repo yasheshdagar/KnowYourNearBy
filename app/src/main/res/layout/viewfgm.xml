@@ -5,7 +5,9 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context=".ViewFragment">
+    tools:context=".ViewFragment"
+    android:background="@color/white"
+    android:clickable="false">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -24,9 +26,9 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:layout_gravity="center"
-            android:text="No GeoFences"
-            android:visibility="invisible" />
-
+            android:text="No GeoFences Created"
+            android:textSize="20sp"
+            android:visibility="gone" />
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -5,8 +5,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.FragmentActivity;
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
 
 import android.Manifest;
 import android.app.Dialog;

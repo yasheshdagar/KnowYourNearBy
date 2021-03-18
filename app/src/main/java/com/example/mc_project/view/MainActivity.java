@@ -109,9 +109,16 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(this, "Location not available...", Toast.LENGTH_SHORT).show();
                         }
                     }
-
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
+
+                case R.id.my_geofences:
+                if(!checkVisibility("ViewFragment")){
+                    addFragment(new ViewFragment(), "ViewFragment", true, null, R.id.fragment_container);
+                }
+
+                drawerLayout.closeDrawer(GravityCompat.START);
+                break;
             }
 
             return true;
@@ -121,7 +128,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getLatLng();
+        int topOfStack = (getSupportFragmentManager().getBackStackEntryCount() - 1);
+        if(topOfStack == -1) getLatLng();
     }
 
     private void getLatLng() {
@@ -197,14 +205,6 @@ public class MainActivity extends AppCompatActivity {
         totalCases.setText(Integer.toString(response.getInContainmentList().get(0).getTotalCases()));
         activeCases.setText(Integer.toString(response.getInContainmentList().get(0).getActiveCases()));
     }
-
-    myGeofences.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            frameLayout.setVisibility(View.VISIBLE);
-            addFragment(new ViewFragment(), "ViewFragment", true, null, R.id.fragment_container);
-        }
-    });
 
     public void addFragment(Fragment fragment, String tag, boolean addToBackStack, Bundle bundle, int frameLayout) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

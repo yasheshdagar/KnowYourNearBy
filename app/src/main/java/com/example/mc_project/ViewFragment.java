@@ -2,6 +2,7 @@ package com.example.mc_project;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ public class ViewFragment extends Fragment implements RecyclerAdapter.OnItemClic
     private List<GeoFence> list;
     private Database database;
     private FloatingActionButton floatingActionButton;
+
     public ViewFragment(){
 
     }
@@ -37,12 +39,10 @@ public class ViewFragment extends Fragment implements RecyclerAdapter.OnItemClic
 
         database = new Database(getContext());
         list = database.rdb.geoFenceDao().getAllGeoFences();
+
         if(list.size()==0){
             tview.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.INVISIBLE);
-        }
-        else {
-            recyclerView.setVisibility(View.VISIBLE);
+        } else {
             tview.setVisibility(View.INVISIBLE);
             layoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(layoutManager);
@@ -97,8 +97,12 @@ public class ViewFragment extends Fragment implements RecyclerAdapter.OnItemClic
             recyclerAdapter = new RecyclerAdapter(list);
             recyclerView.setAdapter(recyclerAdapter);
         }else {
-            list = database.rdb.geoFenceDao().getAllGeoFences();
-            recyclerAdapter.updateAdapter(list);
+            list.clear();
+            list.addAll(database.rdb.geoFenceDao().getAllGeoFences());
+            recyclerAdapter.notifyDataSetChanged();
+            tview.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            Log.i(getActivity().getClass().getName(), "[onResume] - size" + list.size());
         }
 
     }

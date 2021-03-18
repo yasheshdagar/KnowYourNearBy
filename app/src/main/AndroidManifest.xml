@@ -47,16 +47,12 @@
 
         <activity
             android:name=".ViewGeofence"
-            android:label="@string/title_activity_view_geofence"></activity>
+            android:label="@string/title_activity_view_geofence"/>
+
         <activity android:name=".DatabaseActivity" />
 
-        <activity android:name=".view.MapsActivity"
+        <activity android:name=".MapsActivity"
             android:label="@string/title_activity_maps">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
         </activity>
 
     </application>
