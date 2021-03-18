@@ -37,8 +37,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".view.MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".view.MainActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -46,13 +45,11 @@
         </activity>
 
         <activity
-            android:name=".ViewGeofence"
-            android:label="@string/title_activity_view_geofence"/>
+            android:name=".ViewGeofence" android:label="@string/title_activity_view_geofence" android:screenOrientation="portrait"/>
 
-        <activity android:name=".DatabaseActivity" />
+        <activity android:name=".DatabaseActivity" android:screenOrientation="portrait"/>
 
-        <activity android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
+        <activity android:name=".MapsActivity" android:label="@string/title_activity_maps" android:screenOrientation="portrait">
         </activity>
 
     </application>

@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     app:cardCornerRadius="3dp"
     app:cardElevation="3dp"
-    app:cardUseCompatPadding="true"
-    android:orientation="vertical"
-    >
+    app:cardUseCompatPadding="true">
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"
-        >
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
         <ImageView
-            android:layout_width="75dp"
-            android:layout_height="75dp"
             android:id="@+id/imageid"
-            android:src="@mipmap/ic_launcher"
-            android:layout_centerVertical="true" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_location" />
 
         <TextView
             android:id="@+id/Name"
@@ -27,29 +26,25 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_toEndOf="@+id/imageid"
+            android:layout_toRightOf="@+id/imageid"
             android:text="Name"
             android:textColor="#000"
-            android:textStyle="bold"
-            android:textSize="22sp"
-            android:layout_toRightOf="@+id/imageid"
-            android:layout_toEndOf = "@+id/imageid"
-            />
+            android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/radius"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/radius"
-            android:textSize="18sp"
-            android:textColor="#a9a9a9"
-            android:layout_toRightOf="@+id/imageid"
-            android:layout_toEndOf = "@+id/imageid"
-            android:text="Radius"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
             android:layout_below="@+id/Name"
-
-            />
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/imageid"
+            android:layout_toRightOf="@+id/imageid"
+            android:text="Radius"
+            android:textColor="#a9a9a9"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/type"
@@ -63,17 +58,18 @@
             android:layout_toRightOf="@+id/imageid"
             android:text="Type"
             android:textColor="#a9a9a9"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/deleteCL"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_below="@+id/Name"
             android:layout_alignEnd="@+id/type"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="-50dp"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_marginEnd="-80dp"
+            android:src="@drawable/ic_baseline_delete_24"
+            app:tint="@color/colorPrimary" />
 
     </RelativeLayout>
 
