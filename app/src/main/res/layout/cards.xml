@@ -19,8 +19,7 @@
             android:layout_height="75dp"
             android:id="@+id/imageid"
             android:src="@mipmap/ic_launcher"
-            android:layout_centerVertical="true"
-            />
+            android:layout_centerVertical="true" />
 
         <TextView
             android:id="@+id/Name"
@@ -73,7 +72,7 @@
             android:layout_below="@+id/Name"
             android:layout_alignEnd="@+id/type"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="-110dp"
+            android:layout_marginEnd="-50dp"
             android:src="@mipmap/ic_launcher" />
 
     </RelativeLayout>
