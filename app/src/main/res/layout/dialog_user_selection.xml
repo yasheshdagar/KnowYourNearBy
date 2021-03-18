@@ -29,16 +29,16 @@
         app:isb_tick_marks_drawable="@drawable/level_indicator"
         app:isb_show_tick_texts="true"
         app:isb_tick_texts_size="15sp"
-        app:isb_tick_texts_color="@color/color_blue"
-        app:isb_thumb_color="@color/color_green"
+        app:isb_thumb_color="@color/colorPrimaryDark"
         app:isb_thumb_size="20dp"
         app:isb_show_indicator="rounded_rectangle"
         app:isb_indicator_color="@color/color_gray"
-        app:isb_indicator_text_color="@color/colorAccent"
+        app:isb_indicator_text_color="@color/colorPrimary"
+        app:isb_tick_texts_color="@color/colorPrimaryDark"
         app:isb_indicator_text_size="18sp"
         app:isb_track_background_color="@color/color_gray"
         app:isb_track_background_size="2dp"
-        app:isb_track_progress_color="@color/color_blue"
+        app:isb_track_progress_color="@color/colorPrimary"
         app:isb_track_progress_size="4dp"
         app:isb_only_thumb_draggable="false"
         android:layout_marginBottom="10dp"/>
@@ -66,7 +66,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18dp"
-        android:backgroundTint="@color/purple_500"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/colorPrimary"
         android:text="Done"/>
 
 </LinearLayout>

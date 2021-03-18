@@ -128,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        int topOfStack = (getSupportFragmentManager().getBackStackEntryCount() - 1);
-        if(topOfStack == -1) getLatLng();
+        /*int topOfStack = (getSupportFragmentManager().getBackStackEntryCount() - 1);
+        if(topOfStack == -1) getLatLng();*/
     }
 
     private void getLatLng() {

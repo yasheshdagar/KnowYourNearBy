@@ -73,7 +73,7 @@
             android:layout_below="@+id/Name"
             android:layout_alignEnd="@+id/type"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="-110dp"
+            android:layout_marginEnd="-50dp"
             android:src="@mipmap/ic_launcher" />
 
     </RelativeLayout>
