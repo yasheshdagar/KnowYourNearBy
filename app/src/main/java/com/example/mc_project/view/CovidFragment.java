@@ -183,7 +183,7 @@ public class CovidFragment extends Fragment implements CovidListener {
         if (checkPermission(LOCATION_PERMISSION)) {
             geofencingClient.addGeofences(geofencingRequest, pendingIntent).addOnSuccessListener(getActivity(), (aVoid) -> {
                 Toast.makeText(getActivity(), "Geofence created successfully...", Toast.LENGTH_LONG).show();
-                Database.getRdb().geoFenceDao().addGeoFence(createGeofenceData(placeName));
+                Database.getRdb().geoFenceDao().addGeoFence(createGeofenceData(latitude, longitude, placeName));
 
             }).addOnFailureListener(getActivity(), e -> {
                 Log.i(this.getActivity().getClass().getName(), "[setUpGeofence] - error:" + e.getMessage());
@@ -193,14 +193,14 @@ public class CovidFragment extends Fragment implements CovidListener {
 
     }
 
-    private GeoFence createGeofenceData(String placeName) {
+    private GeoFence createGeofenceData(Double latitude, Double longitude, String placeName) {
 
         GeoFence geoFence = new GeoFence();
         geoFence.setId(0);
         geoFence.setName(placeName);
         geoFence.setLatitude(latitude);
         geoFence.setLongitude(longitude);
-        geoFence.setRadius(500);
+        geoFence.setRadius(300);
         geoFence.setColor(-65536); //red integer value
         geoFence.setType("covid");
 
