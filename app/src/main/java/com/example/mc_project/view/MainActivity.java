@@ -113,12 +113,11 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case R.id.my_geofences:
-                if(!checkVisibility("ViewFragment")){
-                    addFragment(new ViewFragment(), "ViewFragment", true, null, R.id.fragment_container);
-                }
-
-                drawerLayout.closeDrawer(GravityCompat.START);
-                break;
+                    if(!checkVisibility("ViewFragment")){
+                        addFragment(new ViewFragment(), "ViewFragment", true, null, R.id.fragment_container);
+                    }
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
             }
 
             return true;
@@ -128,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        /*int topOfStack = (getSupportFragmentManager().getBackStackEntryCount() - 1);
-        if(topOfStack == -1) getLatLng();*/
+        int topOfStack = (getSupportFragmentManager().getBackStackEntryCount() - 1);
+        if(topOfStack == -1) getLatLng();
     }
 
     private void getLatLng() {

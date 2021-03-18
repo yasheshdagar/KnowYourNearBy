@@ -45,8 +45,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         String rds = String.valueOf(gfs.get(position).getRadius());
         rds+=" m";
         holder.Radius.setText(rds);
-        holder.img.setImageResource(R.drawable.geofencesimg);
-        holder.delt.setImageResource(R.drawable.ic_baseline_delete_24);
     }
 
     @Override
