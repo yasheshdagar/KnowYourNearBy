@@ -4,6 +4,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
+        <item name="android:actionMenuTextColor">@color/white</item>
     </style>
+
+    <style name="NavigationView">
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_marginBottom">0dp</item>
+    </style>
+
 </resources>
