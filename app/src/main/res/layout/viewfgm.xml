@@ -39,6 +39,8 @@
             android:layout_gravity="bottom|end"
             android:elevation="5dp"
             android:layout_margin="16dp"
+            android:tint="@color/white"
+            app:backgroundTint="@color/colorPrimaryDark"
             app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
             android:src="@drawable/ic_baseline_add_24" />
 
