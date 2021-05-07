@@ -21,6 +21,7 @@ public class GeofenceReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+
         String title = "", text = "";
 
         SendingNotification notification = new SendingNotification(context);
@@ -35,20 +36,36 @@ public class GeofenceReceiver extends BroadcastReceiver {
 
         List<Geofence> geofenceList =  geofencingEvent.getTriggeringGeofences();
 
-        if(geofenceList.size() == 1){
-            title = "Hey! Geofence ";
+        if(intent.hasExtra("accidentalArea")){
+            int type = geofencingEvent.getGeofenceTransition();
+            title = "Black Spot ";
             text = "" + geofenceList.get(0).getRequestId();;
+
+            if (type == Geofence.GEOFENCE_TRANSITION_ENTER){
+                notification.sendNotification(title + "entered", text);
+            }else if (type == Geofence.GEOFENCE_TRANSITION_EXIT){
+                notification.sendNotification(title + "exited", text);
+            }
+
         }else {
-            title = "Multiple geofences ";
-            text = "Have a nice day...";
+            if(geofenceList.size() == 1){
+                title = "Hey! Geofence ";
+                text = "" + geofenceList.get(0).getRequestId();;
+            }else {
+                title = "Multiple geofences ";
+                text = "Have a nice day...";
+            }
+
+            int type = geofencingEvent.getGeofenceTransition();
+
+            if (type == Geofence.GEOFENCE_TRANSITION_ENTER){
+                notification.sendNotification(title + "entered", text);
+            }else if (type == Geofence.GEOFENCE_TRANSITION_EXIT){
+                notification.sendNotification(title + "exited", text);
+            }
         }
 
-        int type = geofencingEvent.getGeofenceTransition();
 
-        if (type == Geofence.GEOFENCE_TRANSITION_ENTER){
-            notification.sendNotification(title + "entered", text);
-        }else if (type == Geofence.GEOFENCE_TRANSITION_EXIT){
-            notification.sendNotification(title + "exited", text);
-        }
+
     }
 }
