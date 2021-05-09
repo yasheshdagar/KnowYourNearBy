@@ -2,20 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/covid"
-        android:title="Covid">
-
-        <menu>
-            <item
-                android:id="@+id/hot_spots"
-                android:title="HotSpots"
-                android:icon="@drawable/ic_virus"
-                android:iconTint="@color/white"/>
-        </menu>
-
-    </item>
-
-    <item
         android:id="@+id/geofences"
         android:title="Geofence">
 
@@ -24,6 +10,20 @@
                 android:id="@+id/my_geofences"
                 android:title="My Geofences"
                 android:icon="@drawable/ic_location"/>
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/covid"
+        android:title="Covid - 19">
+
+        <menu>
+            <item
+                android:id="@+id/hot_spots"
+                android:title="Containment Zones"
+                android:icon="@drawable/ic_virus"
+                android:iconTint="@color/white"/>
         </menu>
 
     </item>

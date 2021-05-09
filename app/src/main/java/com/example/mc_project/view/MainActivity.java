@@ -76,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
+        getWindow().setStatusBarColor(this.getResources().getColor(R.color.colorPrimaryDark));
+
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         containmentZonePresenter = new InContainmentZonePresenter(this);
 

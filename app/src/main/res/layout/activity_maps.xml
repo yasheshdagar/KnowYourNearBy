@@ -39,5 +39,13 @@
         android:layout_height="0dp"
         android:layout_weight="10"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:gravity="center"
+        android:text="Long press to create geofence"
+        android:textColor="@color/white"
+        android:background="@color/black"/>
+
 
 </LinearLayout>

@@ -7,9 +7,11 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -307,7 +309,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .addOnSuccessListener(this, new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(MapsActivity.this, "Geofence added successfully", Toast.LENGTH_SHORT).show();
 
                             String type = "custom";
                             gf.setId(0);
@@ -321,15 +322,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             //DatabaseActivity.rdb.geoFenceDao().addGeoFence(gf);
                             Database database = new Database(MapsActivity.this);
                             database.rdb.geoFenceDao().addGeoFence(gf);
-                            Toast.makeText(MapsActivity.this,"Data Saved !!",Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(MapsActivity.this,"Data Saved !!",Toast.LENGTH_SHORT).show();
 
 
                             String title = "" + (int) radius + " m";
                             addMarker(latLng, title, color);
                             mMap.addCircle(controller.addCircle(latLng, radius, r, g, b));
 
-
-
+                            showSuccessDialog();
                         }
                     }).addOnFailureListener(this, new OnFailureListener() {
                 @Override
@@ -344,6 +344,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         else {
             Toast.makeText(this, "Location Permission Required!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void showSuccessDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage("Geofence was created successfully")
+                .setCancelable(false)
+                .setPositiveButton("Done", (dialog, which) -> {
+                    dialog.dismiss();
+                });
+
+        builder.setTitle("Success");
+        builder.create().show();
     }
 
     private void addMarker(LatLng latLng, String title, String color){

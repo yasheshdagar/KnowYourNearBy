@@ -87,9 +87,9 @@ public class AccidentAreasFragment extends Fragment implements LocationListener 
 //            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
 //            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
-            locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getContext(), "Permissions not granted", Toast.LENGTH_SHORT).show();
+            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(context, "Permissions not granted", Toast.LENGTH_SHORT).show();
             }else {
                 mMap.setMyLocationEnabled(true);
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 50000, 0, AccidentAreasFragment.this); //50 sec
@@ -104,19 +104,20 @@ public class AccidentAreasFragment extends Fragment implements LocationListener 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        context = getActivity();
+
         View view =  inflater.inflate(R.layout.fragment_accident_areas, container, false);
-        intent = new Intent(getContext(), GeofenceReceiver.class);
+        intent = new Intent(context, GeofenceReceiver.class);
         intent.putExtra("accidentalArea", 5);
-        geofencingClient = LocationServices.getGeofencingClient(getContext());
-        controller = new GeofenceController(getContext());
-        geoCoderLocation = new Geocoder(getContext());
+        geofencingClient = LocationServices.getGeofencingClient(context);
+        controller = new GeofenceController(context);
+        geoCoderLocation = new Geocoder(context);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-        context = getActivity();
 
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment =
@@ -137,7 +138,7 @@ public class AccidentAreasFragment extends Fragment implements LocationListener 
 
         Log.i("location_fragment", "" + location + location.getLatitude());
         LatLng myLatLang = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLang, 13));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLang, 12));
 
 
         try {
@@ -189,7 +190,7 @@ public class AccidentAreasFragment extends Fragment implements LocationListener 
 
                                     /*Register Broadcast Receiver
                                      */
-                                    pendingIntent = PendingIntent.getBroadcast(getContext(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                    pendingIntent = PendingIntent.getBroadcast(context, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                     LatLng latLng = new LatLng(latitude, longitude);
                                     geofenceAdded(latLng, radius);
                                 }
@@ -219,11 +220,11 @@ public class AccidentAreasFragment extends Fragment implements LocationListener 
     }
     @Override
     public void onProviderDisabled(@NonNull String provider) {
-        Toast.makeText(getContext(), "Enable Location", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Enable Location", Toast.LENGTH_SHORT).show();
     }
 
     private void geofenceAdded(LatLng latLng, float radius){
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             geofencingClient.addGeofences(geofencingRequest, pendingIntent)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -248,7 +249,7 @@ public class AccidentAreasFragment extends Fragment implements LocationListener 
                 }
             });
         }else {
-            Toast.makeText(getContext(), "Location Permission Required!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Location Permission Required!", Toast.LENGTH_SHORT).show();
         }
 
     }

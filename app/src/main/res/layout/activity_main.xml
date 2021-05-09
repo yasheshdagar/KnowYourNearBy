@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:openDrawer="start"
-    android:background="#262626">
+    android:background="@color/white">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -225,7 +225,7 @@
         android:theme="@style/NavigationView"
         app:itemTextColor="@color/white"
         app:itemIconTint="@color/white"
-        android:background="#99000000"
+        android:background="#000000"
         app:menu="@menu/drawer_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
