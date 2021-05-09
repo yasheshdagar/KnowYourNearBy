@@ -1,6 +1,7 @@
 package com.example.mc_project.view;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -19,7 +20,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.mc_project.AccidentAreasFragment;
+import com.example.mc_project.MapsActivity;
 import com.example.mc_project.R;
 import com.example.mc_project.SearchBlackSpots;
 import com.example.mc_project.api.ApiUrl;
@@ -136,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
-
             }
 
             return true;

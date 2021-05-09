@@ -1,8 +1,7 @@
-package com.example.mc_project;
+package com.example.mc_project.view;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -29,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.mc_project.R;
 import com.example.mc_project.controller.GeofenceController;
 import com.example.mc_project.receiver.GeofenceReceiver;
 import com.google.android.gms.location.Geofence;
@@ -62,7 +62,7 @@ public class AccidentAreasFragment extends Fragment implements LocationListener 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
 
-    private Geocoder geocoderLocation;
+    private Geocoder geoCoderLocation;
 
     private String city;
     private double distanceKm;
@@ -74,7 +74,9 @@ public class AccidentAreasFragment extends Fragment implements LocationListener 
     private GeofenceController controller;
     private float radius = 500f;
 
+    private Context context;
 
+    Geocoder geocoder;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -101,27 +103,29 @@ public class AccidentAreasFragment extends Fragment implements LocationListener 
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_accident_areas, container, false);
         intent = new Intent(getContext(), GeofenceReceiver.class);
         intent.putExtra("accidentalArea", 5);
         geofencingClient = LocationServices.getGeofencingClient(getContext());
         controller = new GeofenceController(getContext());
-        geocoderLocation = new Geocoder(getContext());
+        geoCoderLocation = new Geocoder(getContext());
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        context = getActivity();
+
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.mapAccidents);
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
+
+        geocoder = new Geocoder(context, Locale.getDefault());
     }
 
 
@@ -132,7 +136,6 @@ public class AccidentAreasFragment extends Fragment implements LocationListener 
         removeGeofence();
 
         Log.i("location_fragment", "" + location + location.getLatitude());
-        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
         LatLng myLatLang = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLang, 16));
 
@@ -163,7 +166,7 @@ public class AccidentAreasFragment extends Fragment implements LocationListener 
                         for (int i = 0; i < areas.length; i++) {
                             try {
                                 String area = areas[i] + " " + city;
-                                addressList = geocoderLocation.getFromLocationName(area, 1);
+                                addressList = geoCoderLocation.getFromLocationName(area, 1);
 
                                 Address areaAccident = addressList.get(0);
                                 double latitude = areaAccident.getLatitude();
@@ -269,18 +272,12 @@ public class AccidentAreasFragment extends Fragment implements LocationListener 
 
     void removeGeofence(){
         geofencingClient.removeGeofences(pendingIntent)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+                .addOnSuccessListener(aVoid -> {
 
-            }
-        });
+                }).addOnFailureListener(e -> {
+
+                });
     }
-
 }
 
 

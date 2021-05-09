@@ -1,5 +1,6 @@
 package com.example.mc_project;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -45,8 +46,7 @@ public class SearchBlackSpots extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_search_black_spots, container, false);
     }
 
@@ -93,8 +93,6 @@ public class SearchBlackSpots extends Fragment {
                 arrayAdapterCity.clear();
                 arrayAdapterCity.add("Select City");
                 arrayListAreas.clear();
-
-
 
                 state = spinnerState.getItemAtPosition(i).toString();
                 //state = "Haryana";
