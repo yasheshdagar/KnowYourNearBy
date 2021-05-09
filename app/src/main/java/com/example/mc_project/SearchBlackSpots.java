@@ -84,6 +84,7 @@ public class SearchBlackSpots extends Fragment {
         arrayAdapterCity = new ArrayAdapter<String>(getContext(),  android.R.layout.simple_spinner_dropdown_item);
         arrayAdapterCity.add("Select City");
         recyclerAdapterSpots = new RecyclerAdapterSpots(getContext(), R.layout.blackspot_item, arrayListAreas);
+        spinnerCity.setAdapter(arrayAdapterCity);
 
         spinnerState.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -134,6 +135,7 @@ public class SearchBlackSpots extends Fragment {
         spinnerCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                arrayListAreas.clear();
                 String city = spinnerCity.getItemAtPosition(i).toString();
 
                 if(!city.equals("Select City")) {

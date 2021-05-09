@@ -137,7 +137,7 @@ public class AccidentAreasFragment extends Fragment implements LocationListener 
 
         Log.i("location_fragment", "" + location + location.getLatitude());
         LatLng myLatLang = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLang, 16));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLang, 13));
 
 
         try {

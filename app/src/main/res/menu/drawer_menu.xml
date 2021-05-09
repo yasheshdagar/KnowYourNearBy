@@ -55,12 +55,12 @@
             <item
                 android:id="@+id/accidental_areas"
                 android:title="Accidental Prone Areas"
-                android:icon="@drawable/ic_blackspot"/>
+                android:icon="@drawable/ic_black_spot"/>
 
             <item
                 android:id="@+id/search_blackspot"
-                android:title="Search Black Spots"
-                android:icon="@drawable/ic_baseline_search_24"/>
+                android:title="View Black Spots"
+                android:icon="@drawable/ic_baseline_preview_24"/>
 
         </menu>
 
