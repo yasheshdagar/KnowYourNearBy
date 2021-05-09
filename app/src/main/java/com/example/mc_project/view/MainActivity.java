@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -20,18 +19,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
-
-import com.example.mc_project.DatabaseActivity;
-import com.example.mc_project.MapsActivity;
+import com.example.mc_project.AccidentAreasFragment;
 import com.example.mc_project.R;
+import com.example.mc_project.SearchBlackSpots;
 import com.example.mc_project.api.ApiUrl;
 import com.example.mc_project.model.request.InContainmentZoneRequest;
 import com.example.mc_project.model.response.InContainmentZoneResponse;
@@ -130,6 +120,20 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(this, MapsActivity.class);
                     intent.putExtra("places", true);
                     startActivity(intent);
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+
+                case R.id.accidental_areas:
+                    if(!checkVisibility("AccidentAreasFragment")){
+                        addFragment(new AccidentAreasFragment(), "AccidentAreasFragment", true, null, R.id.fragment_container);
+                    }
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+
+                case R.id.search_blackspot:
+                    if(!checkVisibility("SearchBlackSpotsFragment")){
+                        addFragment(new SearchBlackSpots(), "SearchBlackSpotsFragment", true, null, R.id.fragment_container);
+                    }
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
 

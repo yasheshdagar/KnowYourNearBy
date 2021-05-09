@@ -26,6 +26,7 @@ public class GeofenceController extends ContextWrapper {
 
     }
 
+
     public static CircleOptions addCircle(LatLng latLng, float radius, int r, int g, int b){
 
         CircleOptions circleOptions = new CircleOptions();

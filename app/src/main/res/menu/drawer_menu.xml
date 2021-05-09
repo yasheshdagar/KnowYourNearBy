@@ -47,6 +47,25 @@
 
     </item>
 
+    <item
+        android:id="@+id/black_spots"
+        android:title="Black Spots">
+
+        <menu>
+            <item
+                android:id="@+id/accidental_areas"
+                android:title="Accidental Prone Areas"
+                android:icon="@drawable/ic_blackspot"/>
+
+            <item
+                android:id="@+id/search_blackspot"
+                android:title="Search Black Spots"
+                android:icon="@drawable/ic_baseline_search_24"/>
+
+        </menu>
+
+    </item>
+
 <!--    <item-->
 <!--        android:id="@+id/about"-->
 <!--        android:title="About">-->
