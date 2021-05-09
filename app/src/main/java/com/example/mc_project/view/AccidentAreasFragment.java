@@ -278,6 +278,12 @@ public class AccidentAreasFragment extends Fragment implements LocationListener 
 
                 });
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        locationManager.removeUpdates(this);
+    }
 }
 
 
