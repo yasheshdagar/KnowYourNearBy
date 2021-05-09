@@ -225,7 +225,7 @@
         android:theme="@style/NavigationView"
         app:itemTextColor="@color/white"
         app:itemIconTint="@color/white"
-        android:background="#000000"
+        android:background="@color/colorPrimaryDark"
         app:menu="@menu/drawer_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
