@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    app:cardCornerRadius="3dp"
     app:cardElevation="3dp"
+    app:cardCornerRadius="5dp"
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
@@ -43,7 +43,7 @@
             android:layout_toEndOf="@+id/imageid"
             android:layout_toRightOf="@+id/imageid"
             android:text="Radius"
-            android:textColor="#a9a9a9"
+            android:textColor="@color/common_google_signin_btn_text_light_default"
             android:textSize="16sp" />
 
         <TextView
@@ -57,7 +57,7 @@
             android:layout_toEndOf="@+id/radius"
             android:layout_toRightOf="@+id/imageid"
             android:text="Type"
-            android:textColor="#a9a9a9"
+            android:textColor="@color/common_google_signin_btn_text_light_default"
             android:textSize="16sp" />
 
         <ImageView

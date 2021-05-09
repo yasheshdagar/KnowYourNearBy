@@ -1,14 +1,11 @@
 package com.example.mc_project.presenter;
 
-import android.app.Activity;
 import android.widget.Toast;
 
-import com.example.mc_project.api.ApiRequest;
+import com.example.mc_project.api.covidApiRequest;
 import com.example.mc_project.api.Client;
 import com.example.mc_project.model.request.InContainmentZoneRequest;
-import com.example.mc_project.model.request.LocationGeoIQRequest;
 import com.example.mc_project.model.response.InContainmentZoneResponse;
-import com.example.mc_project.model.response.LocationGeoIQResponse;
 import com.example.mc_project.view.MainActivity;
 
 import retrofit2.Call;
@@ -25,7 +22,7 @@ public class InContainmentZonePresenter {
 
     public void getInContainmentZoneStatus(InContainmentZoneRequest inContainmentZoneRequest){
 
-        ApiRequest apiRequest = Client.getInstance().getApiRequest();
+        covidApiRequest apiRequest = Client.getCovidClient().getCovidApiRequest();
         Call<InContainmentZoneResponse> call = apiRequest.getInContainmentZoneStatus(inContainmentZoneRequest);
 
         call.enqueue(new Callback<InContainmentZoneResponse>() {

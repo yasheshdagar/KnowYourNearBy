@@ -9,7 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
-public interface ApiRequest {
+public interface covidApiRequest {
 
     @POST(ApiUrl.LOCATION_BASED_NEARBY_ZONES)
     Call<LocationGeoIQResponse> getLocationBasedRegions(@Body LocationGeoIQRequest locationGeoIQRequest);

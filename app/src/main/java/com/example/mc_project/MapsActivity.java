@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -21,12 +22,19 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.divyanshu.colorseekbar.ColorSeekBar;
 import com.example.mc_project.controller.GeofenceController;
+import com.example.mc_project.model.response.SuggestionResponse;
+import com.example.mc_project.presenter.PlacePresenter;
 import com.example.mc_project.receiver.GeofenceReceiver;
+import com.example.mc_project.utility.Utility;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
@@ -42,11 +50,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.OnSeekChangeListener;
 import com.warkiz.widget.SeekParams;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -68,6 +81,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GeoFence gf;
     private String requestId;
 
+    private LinearLayout searchHolderLayout;
+    private EditText searchBar;
+    private PlacePresenter placePresenter;
+
+    private boolean place, restaurants;
+
+    private ProgressDialog progressDialog;
+
 
     private FusedLocationProviderClient fusedLocationProviderClient;
     //static RoomDbClass roomDatabase;
@@ -78,9 +99,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        searchHolderLayout = findViewById(R.id.search_holder_layout);
+        searchBar = findViewById(R.id.search_bar);
+        placePresenter = new PlacePresenter(this);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
 
@@ -88,9 +112,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         controller = new GeofenceController(this);
         gf  = new GeoFence();
 
+        place = getIntent().getBooleanExtra("places", false);
+        restaurants = getIntent().getBooleanExtra("restaurants", false);
+
+        if(place) searchHolderLayout.setVisibility(View.VISIBLE);
+        else searchHolderLayout.setVisibility(View.GONE);
+
         intent = new Intent(this, GeofenceReceiver.class);
 
+        searchBar.setOnEditorActionListener((textView,actionId,keyEvent)->{
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
+                if (progressDialog == null) {
+                    progressDialog = new ProgressDialog(this);
+                    progressDialog.setMessage("Loading...");
+                    progressDialog.setCancelable(Boolean.FALSE);
+                }
+
+                progressDialog.show();
+
+                Utility.hideSoftKeyboard(this);
+                placePresenter.getPlaceSuggestions("delhi", searchBar.getText().toString().trim());
+            }
+            return false;
+        });
     }
 
     /**
@@ -108,6 +153,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.setOnMapLongClickListener(this);
 
+        if(restaurants) {
+
+            double latitude = Double.parseDouble(getIntent().getStringExtra("lat"));
+            double longitude = Double.parseDouble(getIntent().getStringExtra("lng"));
+
+            LatLng myLatLang = new LatLng(latitude, longitude);
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLang, 16));
+
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(myLatLang);
+            mMap.addMarker(markerOptions);
+        }
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
         } else {
@@ -121,7 +179,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                if (location != null) {
+                if (location != null && !restaurants) {
                     LatLng myLatLang = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLang, 16));
                 }
@@ -305,4 +363,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.addMarker(markerOptions);
     }
+
+    public void onSuccessSuggestion(SuggestionResponse response) {
+
+        Log.i(this.getClass().getName(), "[onSuccessSuggestion] - Response received successfully");
+
+        progressDialog.dismiss();
+
+        if (response.getPlaceResponse().getPlaceList().size() > 0){
+
+            LatLng myLatLang = new LatLng(Double.parseDouble(response.getPlaceResponse().getPlaceList().get(0).getLocation().getLatitude()), Double.parseDouble(response.getPlaceResponse().getPlaceList().get(0).getLocation().getLongitude()));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myLatLang, 16));
+
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(myLatLang);
+            markerOptions.title(response.getPlaceResponse().getPlaceList().get(0).getPlaceName());
+
+            mMap.addMarker(markerOptions);
+
+        } else Toast.makeText(this, "No results found", Toast.LENGTH_LONG).show();
+
+    }
+
+    public void onErrorSuggestion() {
+
+        Log.i(this.getClass().getName(), "[onErrorSuggestion] - Error received");
+        progressDialog.dismiss();
+        Toast.makeText(this,"Request couldn't be processed",Toast.LENGTH_SHORT).show();
+    }
+
+
 }

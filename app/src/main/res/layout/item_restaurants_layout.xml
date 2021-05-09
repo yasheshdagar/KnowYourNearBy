@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:cardElevation="3dp"
+    app:cardCornerRadius="5dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/relative_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/imageid"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_restaurant" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toEndOf="@+id/imageid"
+                android:layout_toRightOf="@+id/imageid"
+                android:text="name"
+                android:textColor="#000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/imageid"
+                android:layout_toRightOf="@+id/imageid"
+                android:text="City"
+                android:textColor="@color/common_google_signin_btn_text_light_default"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/name"
+                android:layout_marginStart="59dp"
+                android:layout_marginLeft="123dp"
+                android:layout_marginTop="10dp"
+                android:layout_toEndOf="@+id/city"
+                android:layout_toRightOf="@+id/imageid"
+                android:text="State"
+                android:textColor="@color/common_google_signin_btn_text_light_default"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="end"
+            android:padding="8dp">
+
+            <Button
+                android:id="@+id/geo_fence"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="Geofence"
+                android:background="@drawable/button_border"
+                android:textColor="@color/black"
+                android:padding="8dp"
+                android:textSize="12sp"
+                android:gravity="center"/>
+
+            <Button
+                android:id="@+id/directions"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:text="Directions"
+                android:background="@drawable/button_border"
+                android:textColor="@color/black"
+                android:padding="8dp"
+                android:textSize="12sp"
+                android:layout_marginLeft="14dp"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

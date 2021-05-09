@@ -13,7 +13,8 @@ public class Database extends ContextWrapper {
         rdb = Room.databaseBuilder(base, RoomDbClass.class,"mydb").allowMainThreadQueries().build();
     }
 
-    public static RoomDbClass getRdb() {
+    public static RoomDbClass getRdb(Context context) {
+        if(rdb == null) new Database(context);
         return rdb;
     }
 }

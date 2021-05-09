@@ -183,8 +183,7 @@ public class CovidFragment extends Fragment implements CovidListener {
         if (checkPermission(LOCATION_PERMISSION)) {
             geofencingClient.addGeofences(geofencingRequest, pendingIntent).addOnSuccessListener(getActivity(), (aVoid) -> {
                 Toast.makeText(getActivity(), "Geofence created successfully...", Toast.LENGTH_LONG).show();
-                Database.getRdb().geoFenceDao().addGeoFence(createGeofenceData(latitude, longitude, placeName));
-
+                Database.getRdb(getActivity()).geoFenceDao().addGeoFence(createGeofenceData(latitude, longitude, placeName));
             }).addOnFailureListener(getActivity(), e -> {
                 Log.i(this.getActivity().getClass().getName(), "[setUpGeofence] - error:" + e.getMessage());
                 Toast.makeText(getActivity(), "Geofence not available...", Toast.LENGTH_LONG).show();

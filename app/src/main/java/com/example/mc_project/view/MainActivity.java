@@ -118,6 +118,21 @@ public class MainActivity extends AppCompatActivity {
                     }
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
+
+                case R.id.restaurants:
+                    if(!checkVisibility("RestaurantsFragment")){
+                        addFragment(new RestaurantsFragment(), "RestaurantsFragment", true, null, R.id.fragment_container);
+                    }
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+
+                case R.id.places:
+                    Intent intent = new Intent(this, MapsActivity.class);
+                    intent.putExtra("places", true);
+                    startActivity(intent);
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+
             }
 
             return true;

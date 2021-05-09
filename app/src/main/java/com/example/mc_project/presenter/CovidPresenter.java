@@ -1,9 +1,8 @@
 package com.example.mc_project.presenter;
 
-import android.util.Log;
 import android.widget.Toast;
 
-import com.example.mc_project.api.ApiRequest;
+import com.example.mc_project.api.covidApiRequest;
 import com.example.mc_project.api.Client;
 import com.example.mc_project.model.request.LocationGeoIQRequest;
 import com.example.mc_project.model.response.LocationGeoIQResponse;
@@ -23,7 +22,7 @@ public class CovidPresenter {
 
     public void getLocationBasedRegions(LocationGeoIQRequest locationGeoIQRequest){
 
-        ApiRequest apiRequest = Client.getInstance().getApiRequest();
+        covidApiRequest apiRequest = Client.getCovidClient().getCovidApiRequest();
         Call<LocationGeoIQResponse> call = apiRequest.getLocationBasedRegions(locationGeoIQRequest);
 
         call.enqueue(new Callback<LocationGeoIQResponse>() {
